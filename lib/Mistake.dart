@@ -1,7 +1,7 @@
 class Mistake {
-  String Title;
+  String Desc;
   String Topic;
   String Subject;
 
-  Mistake(this.Title, this.Topic, this.Subject);
+  Mistake(this.Desc, this.Topic, this.Subject);
 }

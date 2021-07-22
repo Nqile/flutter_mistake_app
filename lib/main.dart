@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Mistake Compiler'),
     );
   }
 }
@@ -30,14 +30,14 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-List<Mistake> Mistakes = [
-  Mistake("Mistake One", "Algebra", "Math"),
-  Mistake("Mistake Two", "Biology", "IS"),
-  Mistake("Mistake Three", "Grammar", "English")
-];
-
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  List<Mistake> Mistakes = [
+    Mistake("Q1-Quiz #1", "Algebra", "Math"),
+    Mistake("Q2-Quiz #4", "Geometry", "Math"),
+    Mistake("Q3-Quiz #2", "Trigonometry", "Math")
+  ];
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -61,10 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () {
                           null;
                         },
-                        title: Text(Mistakes[index].Title),
-                        subtitle: Text(Mistakes[index].Subject +
-                            "-" +
-                            Mistakes[index].Topic),
+                        title: Text(Mistakes[index].Topic),
+                        subtitle: Text(Mistakes[index].Desc),
                       ),
                     ),
                   );
