@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Mistake.dart';
+import 'add_entry.dart';
 import 'entry_editor.dart';
 
 void main() {
@@ -63,7 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          //clicking the card goes to the details of the card yes epic
+          var route = new MaterialPageRoute(
+            builder: (BuildContext context) => new add_entry(),
+          );
+          Navigator.of(context).push(route);
+        },
         tooltip: 'Create a New Entry',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
