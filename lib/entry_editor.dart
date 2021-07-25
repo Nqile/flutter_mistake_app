@@ -30,6 +30,8 @@ class _entry_editorState extends State<entry_editor> {
           children: <Widget>[
             //---------------------title------------------------//
             Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text("Title (Name/Tag of the quiz)",
+                style: TextStyle(fontSize: 16.0)),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,6 +63,8 @@ class _entry_editorState extends State<entry_editor> {
             ),
 //  -------------------------subject------------------------//
             Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text("Subject of the Mistake (Example: Math)",
+                style: TextStyle(fontSize: 16.0)),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -91,6 +95,8 @@ class _entry_editorState extends State<entry_editor> {
             ),
 //  -------------------------topic------------------------//
             Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text("Topic of the Mistake (Example: Grammar)",
+                style: TextStyle(fontSize: 16.0)),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -121,6 +127,8 @@ class _entry_editorState extends State<entry_editor> {
             ),
 //  -------------------------desc------------------------//
             Padding(padding: EdgeInsets.only(top: 20.0)),
+            Text("Description of the Mistake",
+                style: TextStyle(fontSize: 16.0)),
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
