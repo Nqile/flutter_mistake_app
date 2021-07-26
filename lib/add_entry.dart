@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'Mistake.dart';
+
 class add_entry extends StatefulWidget {
   const add_entry({Key? key}) : super(key: key);
 
@@ -134,6 +136,14 @@ class _add_entryState extends State<add_entry> {
                 Icon(Icons.edit),
               ],
             ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              new Mistake(_titleInputController.text,  _topicInputController.text, _descInputController.text, _subjectInputController.text); print(Mistake.mistakeList);
+              //updateMenu();
+              Navigator.pop(context);
+              },
+            child: const Text('Save'),
           ),
         ],
       )),

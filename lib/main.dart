@@ -33,24 +33,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //fodder mistakes to test ui
-  List<Mistake> _dummyMistakes = [
-    Mistake("Q2-Quiz #4", "Trigonometry", "Wrong formula used", "Math", "0"),
-    Mistake("Q1-Quiz #1", "Algebra",
-        "I'm not sure, google it later or ask teacher abt it", "Math", "1"),
-    Mistake(
-        "Q3-Quiz #2", "Sin law", "sorry pre di ko na rin alam pre", "Math", "2")
-  ];
-
   //method for supposedly getting data from a json file
   Future<List<Mistake>> _getMistakes() async {
-    final List<Mistake> mistakes = await _dummyMistakes;
+    final List<Mistake> mistakes = await Mistake.mistakeList;
 
     return mistakes;
   }
-
   @override
+  void initState() {
+    super.initState();
+    Mistake("Q2-Quiz #4", "Trigonometry", "Wrong formula used", "Math");
+    Mistake("Q1-Quiz #1", "Algebra","I'm not sure, google it later or ask teacher abt it", "Math");
+    Mistake("Q3-Quiz #2", "Sin law", "sorry pre di ko na rin alam pre", "Math");
+  }
+
+  void updateMenu(BuildContext context)  {
+    setState(() { });
+  }
+
+    @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -76,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 
   //listview builder for the futurebuilder
   Widget _buildListViewSeparated(AsyncSnapshot snapshot) {
