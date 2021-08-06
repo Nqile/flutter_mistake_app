@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mistake_app/addOrEdit.dart';
+import 'package:flutter_mistake_app/database.dart';
+import 'package:intl/intl.dart';
 
 import 'Mistake.dart';
-import 'add_entry.dart';
-import 'entry_editor.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -33,46 +35,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //method for supposedly getting data from a json file
-  Future<List<Mistake>> _getMistakes() async {
-    final List<Mistake> mistakes = await Mistake.mistakeList;
+  late List<Mistake> mistakes;
+  bool isLoading = false;
 
-    return mistakes;
-  }
   @override
   void initState() {
     super.initState();
-    Mistake("Q2-Quiz #4", "Trigonometry", "Wrong formula used", "Math");
-    Mistake("Q1-Quiz #1", "Algebra","I'm not sure, google it later or ask teacher abt it", "Math");
-    Mistake("Q3-Quiz #2", "Sin law", "sorry pre di ko na rin alam pre", "Math");
+    refreshMistakes();
   }
 
-  void updateMenu(BuildContext context)  {
-    setState(() { });
+  @override
+  void dispose() {
+    MistakeDatabase.instance.close();
+    super.dispose();
   }
 
-    @override
+  Future refreshMistakes() async {
+    setState(() => isLoading = true);
+
+    this.mistakes = await MistakeDatabase.instance.readAllMistakes();
+
+    setState(() => isLoading = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: FutureBuilder(
-        future: _getMistakes(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return !snapshot.hasData
-              ? Center(child: CircularProgressIndicator())
-              : _buildListViewSeparated(snapshot);
-        },
+      body: Center(
+        child: isLoading
+            ? CircularProgressIndicator()
+            : mistakes.isEmpty
+                ? Text('No Entries',
+                    style: TextStyle(color: Colors.black, fontSize: 24))
+                : _buildListViewSeparated(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //clicking the card goes to the details of the card yes epic
-          var route = new MaterialPageRoute(
-            builder: (BuildContext context) => new add_entry(),
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AddOrEdit()),
           );
-          Navigator.of(context).push(route);
+
+          refreshMistakes();
         },
         tooltip: 'Create a New Entry',
         child: const Icon(Icons.add),
@@ -80,33 +86,35 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
-  //listview builder for the futurebuilder
-  Widget _buildListViewSeparated(AsyncSnapshot snapshot) {
+  //puts entries on the screen
+  Widget _buildListViewSeparated() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: snapshot.data.length,
+        itemCount: mistakes.length,
         itemBuilder: (context, index) {
+          final mistake = mistakes[index];
           return Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 7.5, horizontal: 20.0),
             child: Card(
               child: ListTile(
-                onTap: () {
-                  //clicking the card goes to the details of the card yes epic
-                  var route = new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        new entry_editor(snapshot: snapshot, index: index),
+                onTap: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => AddOrEdit(mistake: mistake)),
                   );
-                  Navigator.of(context).push(route);
+
+                  refreshMistakes();
                 },
-                title: Text(snapshot.data[index].subject +
-                    " - " +
-                    snapshot.data[index].title),
+                title: Text(mistake.subject + " - " + mistake.title),
                 subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(snapshot.data[index].desc),
+                      SizedBox(height: 4),
+                      Text(DateFormat.yMMMd().format(mistake.createdTime) +
+                          " - " +
+                          mistake.desc),
+                      SizedBox(height: 4),
                       //will add a preview picture to here soon
                     ]),
               ),
