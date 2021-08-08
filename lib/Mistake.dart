@@ -1,5 +1,6 @@
 final String tableMistakes = 'mistakes';
 
+//used for creating a table in database sqflite
 class MistakeFields {
   static final List<String> values = [id, title, topic, desc, subject, time];
 
@@ -14,6 +15,7 @@ class MistakeFields {
 class Mistake {
   final String title, topic, desc, subject;
   final DateTime createdTime;
+  //id is for sqflite
   final int? id;
 
   Mistake(
@@ -24,6 +26,7 @@ class Mistake {
       required this.subject,
       required this.createdTime});
 
+//i think what this does is copies contents of one mistake to another (used for updating a mistake i think)
   Mistake copy({
     int? id,
     String? title,
@@ -41,6 +44,7 @@ class Mistake {
         createdTime: createdTime ?? this.createdTime,
       );
 
+  //returns a map of the mistake
   Map<String, Object?> toJson() => {
         MistakeFields.id: id,
         MistakeFields.title: title,
@@ -50,6 +54,7 @@ class Mistake {
         MistakeFields.time: createdTime.toIso8601String(),
       };
 
+  //turns the map of the mistake into an actual instance of the mistake
   static Mistake fromJson(Map<String, Object?> json) => Mistake(
         id: json[MistakeFields.id] as int?,
         title: json[MistakeFields.title] as String,
