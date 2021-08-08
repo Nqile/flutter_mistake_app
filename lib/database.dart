@@ -9,6 +9,7 @@ class MistakeDatabase {
 
   MistakeDatabase._init();
 
+  //upon calling database of the class MistakeDatabase, check whether there is an existing database, if not then create a new one
   Future<Database> get database async {
     if (_database != null) return _database!;
 
@@ -16,6 +17,7 @@ class MistakeDatabase {
     return _database!;
   }
 
+  // initializes database
   Future<Database> _initDB(String filePath) async {
     //android
     final dbPath = await getDatabasesPath();
@@ -24,6 +26,7 @@ class MistakeDatabase {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
+  // used to create database table 
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT NOT NULL';
@@ -37,6 +40,7 @@ class MistakeDatabase {
         ${MistakeFields.time} $textType)''');
   }
 
+  // creates an instance of a mistake and puts it into the database
   Future<Mistake> create(Mistake mistake) async {
     final db = await instance.database;
 
@@ -44,6 +48,7 @@ class MistakeDatabase {
     return mistake.copy(id: id);
   }
 
+  // returns a mistake within the database based on the id
   Future<Mistake> readMistake(int? id) async {
     final db = await instance.database;
 
@@ -61,6 +66,7 @@ class MistakeDatabase {
     }
   }
 
+  // returns the list of mistakes within the database through returning the map and then converting it to a list
   Future<List<Mistake>> readAllMistakes() async {
     final db = await instance.database;
 
@@ -70,6 +76,7 @@ class MistakeDatabase {
     return result.map((json) => Mistake.fromJson(json)).toList();
   }
 
+  // updates a mistake
   Future<int> update(Mistake mistake) async {
     final db = await instance.database;
 
@@ -81,6 +88,7 @@ class MistakeDatabase {
     );
   }
 
+  // deletes a mistake
   Future<int> delete(int? id) async {
     final db = await instance.database;
 
@@ -91,6 +99,7 @@ class MistakeDatabase {
     );
   }
 
+  // closes the database
   Future close() async {
     final db = await instance.database;
 
