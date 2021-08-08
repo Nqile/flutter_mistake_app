@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+//this widget is just to make main look cleaner
 class MistakeFormWidget extends StatelessWidget {
+//? meaning nullable
   final String? title;
   final String? description;
   final String? subject;
@@ -12,6 +14,7 @@ class MistakeFormWidget extends StatelessWidget {
 
   const MistakeFormWidget({
     Key? key,
+    //if empty, defaults to ''
     this.title = '',
     this.description = '',
     this.subject = '',
@@ -24,6 +27,7 @@ class MistakeFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
+  //returns the whole form basically
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -53,6 +57,7 @@ class MistakeFormWidget extends StatelessWidget {
         ),
       );
 
+  //copy paste copy paste aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   Widget buildTitle() => TextFormField(
         maxLines: 1,
         initialValue: title,
