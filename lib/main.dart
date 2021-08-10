@@ -61,12 +61,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() => isLoading = false);
   }
-
+  var dropdownValue = null;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          DropdownButton<String>(
+            value: dropdownValue,
+            hint: Text("Subject"),
+            icon: const Icon(Icons.arrow_downward),
+            iconSize: 24,
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownValue = newValue!;
+              });
+            },
+            items: <String>['One', 'Two', 'Free', 'Four']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          )
+        ],
       ),
       body: Center(
         //if it's loading, return loading screen, then if the list of mistakes r empty return "no entries" and return the listview if it isn't empty
