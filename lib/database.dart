@@ -26,7 +26,7 @@ class MistakeDatabase {
     return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
-  // used to create database table 
+  // used to create database table
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT NOT NULL';
@@ -37,7 +37,8 @@ class MistakeDatabase {
         ${MistakeFields.topic} $textType, 
         ${MistakeFields.desc} $textType, 
         ${MistakeFields.subject} $textType, 
-        ${MistakeFields.time} $textType)''');
+        ${MistakeFields.time} $textType,
+        ${MistakeFields.imgPath} $textType)''');
   }
 
   // creates an instance of a mistake and puts it into the database

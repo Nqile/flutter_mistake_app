@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() => isLoading = false);
   }
+
   var dropdownValue = null;
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //async so that the refreshMistakes() happens after you come back from whereever screen you came from
         onPressed: () async {
           await Navigator.of(context).push(
-                                                    //in this case it's add
+            //in this case it's add
             MaterialPageRoute(builder: (context) => AddOrEdit()),
           );
 
@@ -136,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                                              //in this case it's edit
+                        //in this case it's edit
                         builder: (context) => AddOrEdit(mistake: mistake)),
                   );
 

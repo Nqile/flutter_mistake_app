@@ -5,6 +5,8 @@ import 'package:flutter_mistake_app/Mistake.dart';
 import 'package:flutter_mistake_app/database.dart';
 import 'package:flutter_mistake_app/mistake_form_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AddOrEdit extends StatefulWidget {
   //makes this nullable, so that you can call this widget whether or not you have a mistake or not
@@ -21,14 +23,25 @@ class AddOrEdit extends StatefulWidget {
 
 class _AddOrEditState extends State<AddOrEdit> {
   File? img;
+  String? imgPath;
   final picker = ImagePicker();
 
-  chooseImage(ImageSource source) async{
+  //
+  chooseImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
-
+    final permanentImg = await saveImagePermanently(pickedFile!.path);
     setState(() {
-      img = File(pickedFile!.path);
+      imgPath = permanentImg.path;
     });
+  }
+
+  //copies the image into a permanent directory i think
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
   }
 
   // used for loading
@@ -50,54 +63,56 @@ class _AddOrEditState extends State<AddOrEdit> {
     description = widget.mistake?.desc ?? '';
     topic = widget.mistake?.topic ?? '';
     subject = widget.mistake?.subject ?? '';
+    imgPath = widget.mistake?.imgPath ?? '';
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          actions: [deleteButton(), buildButton()],
-        ),
-        body: Column(children:[
-        Form(
-          key: _formKey,
-          child: MistakeFormWidget(
-            title: title,
-            description: description,
-            topic: topic,
-            subject: subject,
+      appBar: AppBar(
+        actions: [deleteButton(), buildButton()],
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          Form(
+            key: _formKey,
+            child: MistakeFormWidget(
+              title: title,
+              description: description,
+              topic: topic,
+              subject: subject,
 
-            // when anything is changed, it is reflected i guess idk this is kind of standard form etiquette i think
-            onChangedTitle: (title) => setState(() => this.title = title),
-            onChangedDescription: (description) =>
-                setState(() => this.description = description),
-            onChangedTopic: (topic) => setState(() => this.topic = topic),
-            onChangedSubject: (subject) =>
-                setState(() => this.subject = subject),
+              // when anything is changed, it is reflected i guess idk this is kind of standard form etiquette i think
+              onChangedTitle: (title) => setState(() => this.title = title),
+              onChangedDescription: (description) =>
+                  setState(() => this.description = description),
+              onChangedTopic: (topic) => setState(() => this.topic = topic),
+              onChangedSubject: (subject) =>
+                  setState(() => this.subject = subject),
+            ),
           ),
-        ),
           Text("Images"),
           imageButtons(),
           Container(
-            child: img != null
-                ? Container(
-                width: 200,
-                height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(img!)
-                )
-              )
-            ) :
-                Container(
-                    width: 200,
-                    height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                  )
-                )
-          ),
-        ])
-      );
+              child: imgPath != null
+                  ? Container(
+                      width: 250,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              //uses the imgPath as reference because that's what the database saves
+                              image: FileImage(File(imgPath!)))))
+                  : Container(
+                      width: 250,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ))),
+          SizedBox(height: 40),
+        ]),
+      ));
 
   Widget buildButton() {
     // prevents empty entries
@@ -120,28 +135,22 @@ class _AddOrEditState extends State<AddOrEdit> {
     );
   }
 
-  Widget imageButtons(){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children:[
-        IconButton(
-          icon: Icon(Icons.photo_camera),
-          onPressed: ()
-          {
-            print("Image from camera");
-            chooseImage(ImageSource.camera);
-          },
-        ),
-        IconButton(
-            icon: Icon(Icons.insert_photo),
-            onPressed: ()
-            {
-              print("Image from gallery");
-              chooseImage(ImageSource.gallery);
-            }
-        ),
-      ]
-    );
+  Widget imageButtons() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      IconButton(
+        icon: Icon(Icons.photo_camera),
+        onPressed: () {
+          print("Image from camera");
+          chooseImage(ImageSource.camera);
+        },
+      ),
+      IconButton(
+          icon: Icon(Icons.insert_photo),
+          onPressed: () {
+            print("Image from gallery");
+            chooseImage(ImageSource.gallery);
+          }),
+    ]);
   }
 
   Widget deleteButton() {
@@ -152,7 +161,7 @@ class _AddOrEditState extends State<AddOrEdit> {
         onPressed: () async {
           await MistakeDatabase.instance.delete(widget.mistake?.id);
 
-          Navigator.of(context).pop();
+          Navigator.of(this.context).pop();
         },
       );
     } else {
@@ -174,7 +183,7 @@ class _AddOrEditState extends State<AddOrEdit> {
         await addMistake();
       }
 
-      Navigator.of(context).pop();
+      Navigator.of(this.context).pop();
     }
   }
 
@@ -185,6 +194,7 @@ class _AddOrEditState extends State<AddOrEdit> {
       desc: description,
       topic: topic,
       subject: subject,
+      imgPath: imgPath,
     );
 
     await MistakeDatabase.instance.update(mistake);
@@ -198,6 +208,7 @@ class _AddOrEditState extends State<AddOrEdit> {
       topic: topic,
       subject: subject,
       createdTime: DateTime.now(),
+      imgPath: imgPath!,
     );
 
     await MistakeDatabase.instance.create(mistake);

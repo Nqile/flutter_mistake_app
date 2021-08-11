@@ -10,10 +10,11 @@ class MistakeFields {
   static final String desc = '_desc';
   static final String subject = '_subject';
   static final String time = '_time';
+  static final String imgPath = '_imgPath';
 }
 
 class Mistake {
-  final String title, topic, desc, subject;
+  final String title, topic, desc, subject, imgPath;
   final DateTime createdTime;
   //id is for sqflite
   final int? id;
@@ -24,7 +25,8 @@ class Mistake {
       required this.topic,
       required this.desc,
       required this.subject,
-      required this.createdTime});
+      required this.createdTime,
+      required this.imgPath});
 
 //i think what this does is copies contents of one mistake to another (used for updating a mistake i think)
   Mistake copy({
@@ -34,6 +36,7 @@ class Mistake {
     String? desc,
     String? subject,
     DateTime? createdTime,
+    String? imgPath,
   }) =>
       Mistake(
         id: id ?? this.id,
@@ -42,6 +45,7 @@ class Mistake {
         desc: desc ?? this.desc,
         subject: subject ?? this.subject,
         createdTime: createdTime ?? this.createdTime,
+        imgPath: imgPath ?? this.imgPath,
       );
 
   //returns a map of the mistake
@@ -52,6 +56,7 @@ class Mistake {
         MistakeFields.desc: desc,
         MistakeFields.subject: subject,
         MistakeFields.time: createdTime.toIso8601String(),
+        MistakeFields.imgPath: imgPath,
       };
 
   //turns the map of the mistake into an actual instance of the mistake
@@ -62,8 +67,6 @@ class Mistake {
         desc: json[MistakeFields.desc] as String,
         subject: json[MistakeFields.subject] as String,
         createdTime: DateTime.parse(json[MistakeFields.time] as String),
+        imgPath: json[MistakeFields.imgPath] as String,
       );
 }
-
-//needs a class for the url of pictures for both:
-//the problem and solution
