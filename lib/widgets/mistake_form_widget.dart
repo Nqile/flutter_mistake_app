@@ -5,14 +5,13 @@ class MistakeFormWidget extends StatelessWidget {
 //? meaning nullable
   final String? title;
   final String? description;
-  final String? subject;
+  String? subject;
   final String? topic;
   final ValueChanged<String> onChangedTitle;
   final ValueChanged<String> onChangedDescription;
-  final ValueChanged<String> onChangedSubject;
   final ValueChanged<String> onChangedTopic;
 
-  const MistakeFormWidget({
+  MistakeFormWidget({
     Key? key,
     //if empty, defaults to ''
     this.title = '',
@@ -21,13 +20,12 @@ class MistakeFormWidget extends StatelessWidget {
     this.topic = '',
     required this.onChangedTitle,
     required this.onChangedDescription,
-    required this.onChangedSubject,
     required this.onChangedTopic,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-  //returns the whole form basically
+        //returns the whole form basically
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -38,9 +36,6 @@ class MistakeFormWidget extends StatelessWidget {
               SizedBox(height: 8),
               buildTitle(),
               SizedBox(height: 8),
-              Text("Subject of the Mistake (Example: Math)",
-                  style: TextStyle(fontSize: 16.0)),
-              buildSubject(),
               SizedBox(height: 8),
               Text("Topic of the Mistake (Example: Grammar)",
                   style: TextStyle(fontSize: 16.0)),
@@ -89,21 +84,6 @@ class MistakeFormWidget extends StatelessWidget {
             ? 'The description cannot be empty'
             : null,
         onChanged: onChangedDescription,
-      );
-
-  Widget buildSubject() => TextFormField(
-        maxLines: 1,
-        initialValue: subject,
-        style: TextStyle(color: Colors.black, fontSize: 18),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Type the subject...',
-          hintStyle: TextStyle(color: Colors.black),
-        ),
-        validator: (title) => title != null && title.isEmpty
-            ? 'The subject cannot be empty'
-            : null,
-        onChanged: onChangedSubject,
       );
 
   Widget buildTopic() => TextFormField(

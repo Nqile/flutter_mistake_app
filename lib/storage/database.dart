@@ -1,4 +1,4 @@
-import 'package:flutter_mistake_app/Mistake.dart';
+import 'package:flutter_mistake_app/model/Mistake.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -106,4 +106,27 @@ class MistakeDatabase {
 
     db.close();
   }
+
+  Future<List<Mistake>> readMistakesBasedOnSubject(String subject) async {
+    final db = await instance.database;
+
+    final orderBy = '${MistakeFields.time} ASC';
+    final result = await db.query(
+      tableMistakes,
+      orderBy: orderBy,
+      where: '${MistakeFields.subject} = ?',
+      whereArgs: [subject],
+    );
+
+    return result.map((json) => Mistake.fromJson(json)).toList();
+  }
 }
+
+// needs a method wherein
+//     readMistakesBasedOnSubjects(dropdownvalue){
+//       database SELECT * from mistakes
+//       where: subject = dropdownvalue
+//       return the list of those selected mistakes
+//     }
+
+//also need a method that can get the individual subject of an entry

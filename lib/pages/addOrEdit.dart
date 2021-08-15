@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mistake_app/Mistake.dart';
-import 'package:flutter_mistake_app/database.dart';
-import 'package:flutter_mistake_app/mistake_form_widget.dart';
+import 'package:flutter_mistake_app/model/Mistake.dart';
+import 'package:flutter_mistake_app/pages/subjectPage.dart';
+import 'package:flutter_mistake_app/storage/database.dart';
+import 'package:flutter_mistake_app/widgets/mistake_form_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,7 +36,7 @@ class _AddOrEditState extends State<AddOrEdit> {
     });
   }
 
-  //copies the image into a permanent directory i think
+  //copies the image into a permanent directory (supposedly)
   Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = basename(imagePath);
@@ -62,7 +63,7 @@ class _AddOrEditState extends State<AddOrEdit> {
     title = widget.mistake?.title ?? '';
     description = widget.mistake?.desc ?? '';
     topic = widget.mistake?.topic ?? '';
-    subject = widget.mistake?.subject ?? '';
+    subject = widget.mistake?.subject ?? 'All Subjects';
     imgPath = widget.mistake?.imgPath ?? '';
   }
 
@@ -73,6 +74,11 @@ class _AddOrEditState extends State<AddOrEdit> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          SizedBox(height: 16.0),
+          Text("Subject of the Mistake (Example: Math)",
+              style: TextStyle(fontSize: 16.0)),
+          SizedBox(height: 8.0),
+          buildSubject(context),
           Form(
             key: _formKey,
             child: MistakeFormWidget(
@@ -86,8 +92,6 @@ class _AddOrEditState extends State<AddOrEdit> {
               onChangedDescription: (description) =>
                   setState(() => this.description = description),
               onChangedTopic: (topic) => setState(() => this.topic = topic),
-              onChangedSubject: (subject) =>
-                  setState(() => this.subject = subject),
             ),
           ),
           Text("Images"),
@@ -114,6 +118,49 @@ class _AddOrEditState extends State<AddOrEdit> {
         ]),
       ));
 
+  Widget buildSubject(context) => Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+        width: 0.5,
+        color: Colors.black,
+      )),
+      width: 380,
+      height: 55,
+      child: GestureDetector(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: GestureDetector(
+                  child: Text(subject, style: TextStyle(fontSize: 18)),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(color: Colors.blueGrey)),
+              ),
+              child: Icon(
+                Icons.arrow_drop_down,
+                size: 40,
+              ),
+            ),
+          ],
+        ),
+        onTap: () async {
+          var currentSubject = await Navigator.of(context).push(
+            MaterialPageRoute(
+                //in this case it's edit
+                builder: (context) => SubjectPage()),
+          );
+          setState(() {
+            subject = currentSubject;
+          });
+        },
+      ));
+
   Widget buildButton() {
     // prevents empty entries
     final isFormValid = title.isNotEmpty &&
@@ -122,7 +169,7 @@ class _AddOrEditState extends State<AddOrEdit> {
         subject.isNotEmpty;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           onPrimary: Colors.white,
