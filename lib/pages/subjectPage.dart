@@ -96,7 +96,9 @@ class _SubjectPageState extends State<SubjectPage> {
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                           //in this case it's edit
-                          builder: (context) => SubjectAddOrEdit()),
+                          builder: (context) => SubjectAddOrEdit(
+                                subject: subject,
+                              )),
                     );
 
                   refreshSubjects();
