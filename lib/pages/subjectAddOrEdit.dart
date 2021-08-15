@@ -22,7 +22,7 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
 
     currentSubject = widget.subject ?? '';
     titleAppBar = widget.subject != null ? "Edit a Subject" : "Add a Subject";
-    subjects = SubjectSimplePreferences.getSubjects() ?? [];
+    subjects = SubjectSimplePreferences.getSubjects() ?? ["All Subjects"];
   }
 
   @override
