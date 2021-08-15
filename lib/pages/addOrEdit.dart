@@ -118,6 +118,7 @@ class _AddOrEditState extends State<AddOrEdit> {
         ]),
       ));
 
+  //builds the subject button thing
   Widget buildSubject(context) => Container(
       decoration: BoxDecoration(
           border: Border.all(

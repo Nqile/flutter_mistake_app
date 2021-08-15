@@ -20,8 +20,11 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
   void initState() {
     super.initState();
 
+    // if there is no subject, then it is empty
     currentSubject = widget.subject ?? '';
+    // different text depending on if user is editing or adding a subject
     titleAppBar = widget.subject != null ? "Edit a Subject" : "Add a Subject";
+    // if there are no stored subjects, default subject list to have at least "all subjects"
     subjects = SubjectSimplePreferences.getSubjects() ?? ["All Subjects"];
   }
 
@@ -46,6 +49,7 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
     );
   }
 
+  //subject form
   Widget subjectForm() {
     return Form(
       key: _formKey,
@@ -56,6 +60,7 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
     );
   }
 
+  //subject input holder
   Widget buildSubject() => TextFormField(
         maxLines: 1,
         initialValue: currentSubject,
@@ -79,7 +84,9 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
         },
       );
 
+  //save button
   Widget saveButton() {
+    //only clickable if there is text inside the subject thing
     final isFormValid = currentSubject.isNotEmpty;
 
     return Container(
@@ -109,7 +116,7 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
     if (isValid) {
       final isUpdating = widget.subject != null;
 
-      //if the purpose of this widget was to update a mistake, then call updateMisake(), otherwise addMistake()
+      //if the purpose of this widget was to update a subject, then call updatesubject(), otherwise addsujbject()
       if (isUpdating) {
         await updateSubject();
       } else {
@@ -121,7 +128,7 @@ class _SubjectAddOrEditState extends State<SubjectAddOrEdit> {
   }
 
   Widget deleteButton() {
-    //if adding a mistake, this button will not exist
+    //if adding a subject, this button will not exist
     if (widget.subject != null) {
       return IconButton(
         icon: Icon(Icons.delete, color: Colors.white),

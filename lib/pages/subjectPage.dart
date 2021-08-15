@@ -20,6 +20,7 @@ class _SubjectPageState extends State<SubjectPage> {
     refreshSubjects();
   }
 
+  //updates the list of subjects, used for real time updates in between pages
   Future refreshSubjects() async {
     setState(() {
       isLoading = true;
@@ -48,9 +49,7 @@ class _SubjectPageState extends State<SubjectPage> {
         //async so that the refreshMistakes() happens after you come back from whereever screen you came from
         onPressed: () async {
           await Navigator.of(context).push(
-            MaterialPageRoute(
-                //in this case it's edit
-                builder: (context) => SubjectAddOrEdit()),
+            MaterialPageRoute(builder: (context) => SubjectAddOrEdit()),
           );
 
           refreshSubjects();
@@ -74,6 +73,7 @@ class _SubjectPageState extends State<SubjectPage> {
             child: Card(
               child: ListTile(
                 title: Text(subject),
+                //makes it so you can NOT edit "all subjects" ever
                 trailing: subject == "All Subjects"
                     ? null
                     : IconButton(

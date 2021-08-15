@@ -107,6 +107,7 @@ class MistakeDatabase {
     db.close();
   }
 
+  //returns mistakes based on a "subject", used for categorizing
   Future<List<Mistake>> readMistakesBasedOnSubject(String subject) async {
     final db = await instance.database;
 
