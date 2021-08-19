@@ -86,45 +86,48 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //puts entries on the screen
   Widget _buildListViewSeparated() {
-    return SingleChildScrollView(
-      child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: mistakes.length,
-          itemBuilder: (context, index) {
-            //it's just easier to do this lol
-            final mistake = mistakes[index];
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 7.5, horizontal: 20.0),
-              child: Card(
-                child: ListTile(
-                  //async so that the refreshMistakes() happens after you come back from whereever screen you came from
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                          //in this case it's edit
-                          builder: (context) => AddOrEdit(mistake: mistake)),
-                    );
+    return Column(
+      children: <Widget>[
+        ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: mistakes.length,
+            itemBuilder: (context, index) {
+              //it's just easier to do this lol
+              final mistake = mistakes[index];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 7.5, horizontal: 20.0),
+                child: Card(
+                  child: ListTile(
+                    //async so that the refreshMistakes() happens after you come back from whereever screen you came from
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            //in this case it's edit
+                            builder: (context) => AddOrEdit(mistake: mistake)),
+                      );
 
-                    refreshMistakes();
-                  },
-                  title: mistake.subject == "All Subjects"
-                      ? Text(mistake.title)
-                      : Text(mistake.subject + " - " + mistake.title),
-                  subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 4),
-                        Text(DateFormat.yMMMd().format(mistake.createdTime) +
-                            " - " +
-                            mistake.desc),
-                        SizedBox(height: 4),
-                        //will add a preview picture to here soon
-                      ]),
+                      refreshMistakes();
+                    },
+                    title: mistake.subject == "All Subjects"
+                        ? Text(mistake.title)
+                        : Text(mistake.subject + " - " + mistake.title),
+                    subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 4),
+                          Text(DateFormat.yMMMd().format(mistake.createdTime) +
+                              " - " +
+                              mistake.desc),
+                          SizedBox(height: 4),
+                          //will add a preview picture to here soon
+                        ]),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ],
     );
   }
 

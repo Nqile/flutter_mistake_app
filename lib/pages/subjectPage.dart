@@ -61,8 +61,9 @@ class _SubjectPageState extends State<SubjectPage> {
   }
 
   Widget _separateListViewBuilder() {
-    return SingleChildScrollView(
-      child: ListView.builder(
+    return Column(children: <Widget>[
+      ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: subjects.length,
         itemBuilder: (context, index) {
@@ -107,7 +108,7 @@ class _SubjectPageState extends State<SubjectPage> {
             ),
           );
         },
-      ),
-    );
+      )
+    ]);
   }
 }
